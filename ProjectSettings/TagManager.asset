@@ -7,8 +7,8 @@ TagManager:
   - PlayerOneSpawn
   - PlayerTwoSpawn
   - Projectiles
-  - PortalOneSpawn
-  - PortalTwoSpawn
+  - Arena1PortalFluidSpawnPoint
+  - Arena2PortalFluidSpawnPoint
   layers:
   - Default
   - TransparentFX
@@ -21,8 +21,8 @@ TagManager:
   - PostProcessing
   - Projectiles
   - GhostPlayer
-  - 
-  - 
+  - Wall
+  - Portal
   - 
   - 
   - 

@@ -10,21 +10,20 @@ public class Portal : MonoBehaviour {
   public GameObject EmitterParent;
   [HideInInspector]
   public GameObject CorrespondingPortal;
-  int PlayerId;
-  Transform SourcePoint;
-
+  public Animator PortalAnimator;
+  int ArenaId;
+  Color PortalColor;
   public int TimeoutInterval = 5;
 
   Light PortaLight;
 
-  public void initialize(Color color, GameObject correspondingPortal, int playerId, Transform point) {
+  public void initialize(Color color, GameObject correspondingPortal, int ArenaId) {
     PortalMesh.material.SetColor("_portalColor", color);
     ParticleSystem.MainModule main = Vortex.main;
     main.startColor = color;
-    SourcePoint = point;
-    this.PlayerId = playerId;
     this.CorrespondingPortal = correspondingPortal;
     PortaLight.color = color;
+    PortalColor = color;
   }
 
   void Start() {
@@ -40,9 +39,12 @@ public class Portal : MonoBehaviour {
     yield return new WaitForSeconds(TimeoutInterval);
     Destroy(this.gameObject);
     SignalData data = new SignalData();
-    data.set("PlayerId", PlayerId);
-    data.set("SourcePoint", SourcePoint);
     PortalTimeoutSignal.fire(data);
+  }
+
+  public void changeCorrespondingPortal(GameObject otherPortal) {
+    CorrespondingPortal = otherPortal;
+    PortalAnimator.SetBool("isOpen", CorrespondingPortal ?? false);
   }
 
   void Update() {
@@ -63,8 +65,6 @@ public class Portal : MonoBehaviour {
 
   Vector3 CalculateTeleportDirection(Vector3 incomingVelocity) {
     Vector3 reflection;
-    // Debug.Log(Mathf.Acos(Mathf.Clamp(Vector3.Dot(-Vector3.left, transform.forward), -1, 1)) * Mathf.Rad2Deg);
-    // Debug.Log(Mathf.Acos(Mathf.Clamp(Vector3.Dot(-Vector3.left, CorrespondingPortal.transform.forward), -1, 1)) * Mathf.Rad2Deg);
     float angle = Mathf.Acos(Mathf.Clamp(Vector3.Dot(CorrespondingPortal.transform.forward, transform.forward), -1, 1));
     if (angle > 1.6) {
       reflection = -incomingVelocity;

@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public static class Constants
-{
-  public static List<Vector4> portalColors = new List<Vector4>
+public static class Constants {
+  public static List<Color> portalColors = new List<Color>
   {
-    new Vector4(01.6f,0.2039f,0, 1.2f),
-    // new Color(102,124,89),
-    // new Color(74,191,23)
+     new Color(1.2f,0,0),
+     new Color(0,1.2f,0),
+     new Color(0,0,0,1.2f)
   };
 }
