@@ -9,13 +9,13 @@ public class PortalManager : MonoBehaviour {
   public GameObject portalPrefab;
   // public int spawnInterval = 3;
 
-  public Dictionary<Color, List<GameObject>> PortalMap;
+  public Dictionary<Color, Dictionary<int, GameObject>> PortalMap;
 
   void Start() {
     // initializeSpawnPoints();
     // StartCoroutine(startSpawning());
     PortalTimeoutSignal.addListener(onPortalTimeOut);
-    PortalMap = new Dictionary<Color, List<GameObject>>();
+    PortalMap = new Dictionary<Color, Dictionary<int, GameObject>>();
     PortalSpawnSignal.addListener(SpawnPortal);
   }
 
@@ -24,32 +24,45 @@ public class PortalManager : MonoBehaviour {
     Vector3 direction = portalSpawnData.get<Vector3>("SpawnDirection");
     Color portalColor = portalSpawnData.get<Color>("PortalColor");
     int arenaId = portalSpawnData.get<int>("ArenaId");
-    Vector3 spawnPosition = position + direction * 0.01f;
+    Debug.Log(arenaId);
+    var spawnPosition = new Vector3(position.x, 1.4f, position.z) + direction * 0.01f;
     Quaternion portalRotation = Quaternion.LookRotation(direction);
-    GameObject portalObject = Instantiate(portalPrefab, position, portalRotation);
+    GameObject portalObject = Instantiate(portalPrefab, spawnPosition, portalRotation);
     GameObject correspondingPortal = null;
     if (PortalMap.ContainsKey(portalColor)) {
-      int otherPortalId = getOtherPortalId(arenaId);
-      correspondingPortal = PortalMap[portalColor][otherPortalId];
+      if (PortalMap[portalColor].ContainsKey(arenaId)) {
+        Destroy(PortalMap[portalColor][arenaId]);
+        PortalMap[portalColor].Remove(arenaId);
+      }
+      correspondingPortal = getCorrespondingPortal(arenaId, portalColor);
+    } else {
+      PortalMap.Add(portalColor, new Dictionary<int, GameObject>());
     }
     if (correspondingPortal != null) {
       correspondingPortal.GetComponent<Portal>().changeCorrespondingPortal(portalObject);
     }
     portalObject.GetComponent<Portal>().initialize(portalColor, correspondingPortal, arenaId);
-
+    PortalMap[portalColor].Add(arenaId, portalObject);
   }
 
   void onPortalTimeOut(SignalData data) {
-    int portalId = data.get<int>("ArenaId");
-    Color portalColor = data.get<Color>("PortalColor");
-    int otherPortalId = getOtherPortalId(portalId);
-    GameObject otherPortal = PortalMap[portalColor][otherPortalId];
+    int arenaId = data.get<int>("arenaId");
+    Color portalColor = data.get<Color>("portalColor");
+    GameObject otherPortal = getCorrespondingPortal(arenaId, portalColor);
     if (otherPortal != null) {
       otherPortal.GetComponent<Portal>().changeCorrespondingPortal(null);
     }
+    PortalMap[portalColor].Remove(arenaId);
+    Debug.Log("Portal map");
   }
 
-  int getOtherPortalId(int id) => id == 0 ? 1 : 0;
+  GameObject getCorrespondingPortal(int arenaId, Color portalColor) {
+    int otherPortalId = 1 - arenaId;
+    if (PortalMap.ContainsKey(portalColor) && PortalMap[portalColor].ContainsKey(otherPortalId)) {
+      return PortalMap[portalColor][otherPortalId];
+    }
+    return null;
+  }
 
 
   // void initializeSpawnPoints()

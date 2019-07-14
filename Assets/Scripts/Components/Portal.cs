@@ -21,9 +21,10 @@ public class Portal : MonoBehaviour {
     PortalMesh.material.SetColor("_portalColor", color);
     ParticleSystem.MainModule main = Vortex.main;
     main.startColor = color;
-    this.CorrespondingPortal = correspondingPortal;
+    changeCorrespondingPortal(correspondingPortal);
     PortaLight.color = color;
     PortalColor = color;
+    this.ArenaId = ArenaId;
   }
 
   void Start() {
@@ -33,12 +34,15 @@ public class Portal : MonoBehaviour {
   void Awake() {
     Vortex = EmitterParent.GetComponentInChildren<ParticleSystem>();
     PortaLight = GetComponentInChildren<Light>();
+    PortalAnimator = GetComponent<Animator>();
   }
 
   IEnumerator killSwitch() {
     yield return new WaitForSeconds(TimeoutInterval);
     Destroy(this.gameObject);
     SignalData data = new SignalData();
+    data.set("arenaId", ArenaId);
+    data.set("portalColor", PortalColor);
     PortalTimeoutSignal.fire(data);
   }
 

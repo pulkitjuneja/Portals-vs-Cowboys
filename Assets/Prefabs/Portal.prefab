@@ -121,7 +121,7 @@ Light:
   serializedVersion: 9
   m_Type: 2
   m_Color: {r: 1, g: 0, b: 0.034961224, a: 1.2}
-  m_Intensity: 1024
+  m_Intensity: 18.379171
   m_Range: 2.04
   m_SpotAngle: 43.1
   m_InnerSpotAngle: 21.80208
@@ -211,7 +211,7 @@ MonoBehaviour:
   useVolumetric: 1
   featuresFoldout: 1
   showAdditionalSettings: 0
-  displayLightIntensity: 13
+  displayLightIntensity: 7.2
   displayAreaLightEmissiveMesh: 0
   areaLightCookie: {fileID: 0}
   areaLightShadowCone: 120
@@ -347,7 +347,7 @@ MonoBehaviour:
   EmitterParent: {fileID: 8841721502647586108}
   CorrespondingPortal: {fileID: 0}
   PortalAnimator: {fileID: 0}
-  TimeoutInterval: 20
+  TimeoutInterval: 10
 --- !u!54 &-476273009451282546
 Rigidbody:
   m_ObjectHideFlags: 0

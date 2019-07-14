@@ -8,6 +8,6 @@ public static class Constants {
   {
      new Color(1.2f,0,0),
      new Color(0,1.2f,0),
-     new Color(0,0,0,1.2f)
+     new Color(0,0,1.2f)
   };
 }

@@ -21,6 +21,7 @@ public class PlayerShoot : MonoBehaviour {
 
   void Start() {
     PlayerInput = GetComponent<PlayerInput>();
+    CurrentPortalColor = Color.clear;
     shootLayerMask = (1 << LayerMask.NameToLayer("Wall")) | (1 << LayerMask.NameToLayer("Portal"));
   }
 
@@ -40,7 +41,7 @@ public class PlayerShoot : MonoBehaviour {
   void ShootPortal() {
     if (Input.GetButtonDown(PlayerInput.FirePortal)) {
       float timeSinceLastLaunch = Time.time - LastPortalLaunchTime;
-      if (timeSinceLastLaunch > PortalShootInterval) {
+      if (timeSinceLastLaunch > PortalShootInterval && !CurrentPortalColor.Equals(Color.clear)) {
         RaycastHit raycastHit;
         bool raycastResult = Physics.Raycast(BulletLaunchPoint.position, BulletLaunchPoint.forward,
         out raycastHit, Mathf.Infinity, shootLayerMask);
@@ -52,9 +53,10 @@ public class PlayerShoot : MonoBehaviour {
           portalSpawnData.set("SpawnPosition", raycastHit.point);
           portalSpawnData.set("SpawnDirection", raycastHit.normal);
           portalSpawnData.set("ArenaId", ArenaId);
-          portalSpawnData.set("PortalColor", new Color(1.2f, 0, 0));
+          portalSpawnData.set("PortalColor", CurrentPortalColor);
           PortalSpawnSignal.fire(portalSpawnData);
           LastPortalLaunchTime = Time.time;
+          CurrentPortalColor = Color.clear;
         }
       }
     }
