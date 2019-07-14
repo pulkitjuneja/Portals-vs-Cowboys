@@ -14,8 +14,8 @@ public class PortalFluid : MonoBehaviour {
 
   public void ResetProperties(Color color, Vector3 location, int Arenaid) {
     // set rendererr and particle colors
-    GetComponent<Renderer>().material.SetColor("_EmissionColor", color);
     GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+    GetComponent<Renderer>().material.SetColor("_EmissionColor", color);
     GetComponent<Renderer>().material.color = color;
     animator = GetComponent<Animator>();
     fluidColor = color;
@@ -28,7 +28,7 @@ public class PortalFluid : MonoBehaviour {
     if (other.tag == "Player") {
       PlayerShoot playerShoot = other.gameObject.GetComponent<PlayerShoot>();
       if (playerShoot != null) {
-        playerShoot.CurrentPortalColor = fluidColor;
+        playerShoot.ChangeCurrentPortalColor(fluidColor);
         SignalData fluidUsedData = new SignalData();
         fluidUsedData.set("location", Location);
         fluidUsedData.set("arenaId", Arenaid);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour {
+  public LineRenderer AimLine;
   public Transform BulletLaunchPoint;
   public Signal BulletSpawnSignal;
   public Signal PortalSpawnSignal;
@@ -16,12 +17,15 @@ public class PlayerShoot : MonoBehaviour {
   PlayerInput PlayerInput;
   float LastBulletLaunchTime;
   float LastPortalLaunchTime;
+  RaycastHit FrontPointHit;
+  bool FrontPointHitResult;
 
   int shootLayerMask;
 
+
   void Start() {
     PlayerInput = GetComponent<PlayerInput>();
-    CurrentPortalColor = Color.clear;
+    ChangeCurrentPortalColor(Color.clear);
     shootLayerMask = (1 << LayerMask.NameToLayer("Wall")) | (1 << LayerMask.NameToLayer("Portal"));
   }
 
@@ -38,32 +42,45 @@ public class PlayerShoot : MonoBehaviour {
     }
   }
 
+  public void ChangeCurrentPortalColor(Color color) {
+    CurrentPortalColor = color;
+    AimLine.startColor = AimLine.endColor = color;
+  }
+
+
   void ShootPortal() {
     if (Input.GetButtonDown(PlayerInput.FirePortal)) {
       float timeSinceLastLaunch = Time.time - LastPortalLaunchTime;
       if (timeSinceLastLaunch > PortalShootInterval && !CurrentPortalColor.Equals(Color.clear)) {
-        RaycastHit raycastHit;
-        bool raycastResult = Physics.Raycast(BulletLaunchPoint.position, BulletLaunchPoint.forward,
-        out raycastHit, Mathf.Infinity, shootLayerMask);
-        if (raycastResult) {
-          if (raycastHit.transform.gameObject.layer == LayerMask.NameToLayer("Portal")) {
+        if (FrontPointHitResult) {
+          if (FrontPointHit.transform.gameObject.layer == LayerMask.NameToLayer("Portal")) {
             return;
           }
           SignalData portalSpawnData = new SignalData();
-          portalSpawnData.set("SpawnPosition", raycastHit.point);
-          portalSpawnData.set("SpawnDirection", raycastHit.normal);
+          portalSpawnData.set("SpawnPosition", FrontPointHit.point);
+          portalSpawnData.set("SpawnDirection", FrontPointHit.normal);
           portalSpawnData.set("ArenaId", ArenaId);
           portalSpawnData.set("PortalColor", CurrentPortalColor);
           PortalSpawnSignal.fire(portalSpawnData);
           LastPortalLaunchTime = Time.time;
-          CurrentPortalColor = Color.clear;
+          ChangeCurrentPortalColor(Color.clear);
         }
       }
     }
   }
 
+  // calculating forward direction raycast hit here since it is used both by aim line renderer
+  // and to shoot portals
+  void CalculateFrontPointHit() {
+    FrontPointHitResult = Physics.Raycast(BulletLaunchPoint.position, BulletLaunchPoint.forward,
+     out FrontPointHit, Mathf.Infinity, shootLayerMask);
+    AimLine.SetPositions(new Vector3[] { BulletLaunchPoint.position, FrontPointHit.point });
+  }
+
+
   // Update is called once per frame
   void Update() {
+    CalculateFrontPointHit();
     Shoot();
     ShootPortal();
   }

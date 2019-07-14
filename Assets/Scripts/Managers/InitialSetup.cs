@@ -28,9 +28,4 @@ public class InitialSetup : MonoBehaviour {
     PortalManager.enabled = true;
     BulletManager.enabled = true;
   }
-
-
-  void Update() {
-
-  }
 }
