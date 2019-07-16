@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour {
     float intersect = 0.0f;
     if (playerPlane.Raycast(mouseRay, out intersect)) {
       Vector3 targetpoint = mouseRay.GetPoint(intersect);
-      transform.rotation = Quaternion.LookRotation(transform.position - targetpoint);
+      transform.rotation = Quaternion.LookRotation(targetpoint - transform.position);
     }
   }
 

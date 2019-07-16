@@ -18,7 +18,7 @@ public class RollDodge : PlayerDodgeBase {
 
   public override void PerformDodge() {
     PlayerMovement.CanMove = false;
-    rigidBody.velocity = -transform.forward * 30;
+    rigidBody.velocity = transform.forward * 30;
     Animator.SetTrigger("Dodge");
   }
 
