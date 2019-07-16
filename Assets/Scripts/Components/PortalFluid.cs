@@ -6,6 +6,7 @@ public class PortalFluid : MonoBehaviour {
 
   public Signal PortalFluidUsedSignal;
   public Animator animator;
+  public Renderer SphereRenderer;
 
   Vector3 Location;
   Color fluidColor;
@@ -14,9 +15,9 @@ public class PortalFluid : MonoBehaviour {
 
   public void ResetProperties(Color color, Vector3 location, int Arenaid) {
     // set rendererr and particle colors
-    GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
-    GetComponent<Renderer>().material.SetColor("_EmissionColor", color);
-    GetComponent<Renderer>().material.color = color;
+    SphereRenderer.material.EnableKeyword("_EMISSION");
+    SphereRenderer.material.SetColor("_EmissionColor", color);
+    SphereRenderer.material.SetColor("_BaseColor", color);
     animator = GetComponent<Animator>();
     fluidColor = color;
     fadeOutAnimationTime = 0.1f;
