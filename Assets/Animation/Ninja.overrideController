@@ -8,4 +8,6 @@ AnimatorOverrideController:
   m_PrefabAsset: {fileID: 0}
   m_Name: Ninja
   m_Controller: {fileID: 9100000, guid: 8dcd96509d1f5a140bd11127adc6e7fa, type: 2}
-  m_Clips: []
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 11bbd876f9207c349ab87d685613f6cf, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 6881c434e7c7f73439459ac4d9c585eb, type: 2}
