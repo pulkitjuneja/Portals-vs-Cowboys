@@ -57,7 +57,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: f9045ee950a9342499e0b9e8130b3bcd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -134,7 +134,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 8899fbde2191a9f47b4f96a2f4b71e6e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -243,7 +243,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 8899fbde2191a9f47b4f96a2f4b71e6e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -320,7 +320,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: f9045ee950a9342499e0b9e8130b3bcd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -392,7 +392,7 @@ GameObject:
   - component: {fileID: 3499691024650396405}
   m_Layer: 0
   m_Name: CowBoy
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -405,7 +405,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6849296607263976113}
   m_LocalRotation: {x: 0, y: -0.95021707, z: 0, w: 0.3115888}
-  m_LocalPosition: {x: 18, y: 1, z: -14}
+  m_LocalPosition: {x: 18, y: 3.81, z: -14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6849296608006215348}
@@ -540,6 +540,7 @@ MonoBehaviour:
   HorizontalViewAxis: 
   VerticalViewAxis: 
   Fire: 
+  FirePortal: 
   Dodge: 
   isKeyboard: 0
 --- !u!114 &7162448261689170149
@@ -572,8 +573,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletLaunchPoint: {fileID: 6849296608006215348}
   BulletSpawnSignal: {fileID: 11400000, guid: 8a290dad6a1830e4d835291ebe1720e4, type: 2}
+  PortalSpawnSignal: {fileID: 11400000, guid: d2bdb62cdd9f7b642b26e460a8328aa1, type: 2}
   ShootInterval: 0.5
+  PortalShootInterval: 0.5
   health: 2
+  ArenaId: 0
+  CurrentPortalColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &6849296608006215347
 GameObject:
   m_ObjectHideFlags: 0

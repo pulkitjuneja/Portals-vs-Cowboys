@@ -15,6 +15,8 @@ public class PlayerInput : MonoBehaviour {
   [HideInInspector]
   public string Fire;
   [HideInInspector]
+  public string FirePortal;
+  [HideInInspector]
   public string Dodge;
   [HideInInspector]
   public bool isKeyboard;
@@ -26,6 +28,7 @@ public class PlayerInput : MonoBehaviour {
     HorizontalViewAxis = "P" + controllerId + "HorizontalView";
     VerticalViewAxis = "P" + controllerId + "VerticalView";
     Fire = "P" + controllerId + "Fire";
+    FirePortal = "P" + controllerId + "FirePortal";
     Dodge = "P" + controllerId + "Dodge";
     isKeyboard = controllerId == 1 ? true : false;
   }

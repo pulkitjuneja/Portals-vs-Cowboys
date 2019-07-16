@@ -5,11 +5,25 @@ using UnityEngine;
 public class PlayerShoot : MonoBehaviour {
   public Transform BulletLaunchPoint;
   public Signal BulletSpawnSignal;
+  public Signal PortalSpawnSignal;
   public float ShootInterval = 0.5f;
+  public float PortalShootInterval = 0.5f;
   public int health;
+  // TODO: come up with a better approach
+  public int ArenaId;
+  public Color CurrentPortalColor;
 
   PlayerInput PlayerInput;
   float LastBulletLaunchTime;
+  float LastPortalLaunchTime;
+
+  int shootLayerMask;
+
+  void Start() {
+    PlayerInput = GetComponent<PlayerInput>();
+    CurrentPortalColor = Color.clear;
+    shootLayerMask = (1 << LayerMask.NameToLayer("Wall")) | (1 << LayerMask.NameToLayer("Portal"));
+  }
 
   void Shoot() {
     if (Input.GetButtonDown(PlayerInput.Fire)) {
@@ -24,13 +38,34 @@ public class PlayerShoot : MonoBehaviour {
     }
   }
 
-  void Start() {
-    PlayerInput = GetComponent<PlayerInput>();
+  void ShootPortal() {
+    if (Input.GetButtonDown(PlayerInput.FirePortal)) {
+      float timeSinceLastLaunch = Time.time - LastPortalLaunchTime;
+      if (timeSinceLastLaunch > PortalShootInterval && !CurrentPortalColor.Equals(Color.clear)) {
+        RaycastHit raycastHit;
+        bool raycastResult = Physics.Raycast(BulletLaunchPoint.position, BulletLaunchPoint.forward,
+        out raycastHit, Mathf.Infinity, shootLayerMask);
+        if (raycastResult) {
+          if (raycastHit.transform.gameObject.layer == LayerMask.NameToLayer("Portal")) {
+            return;
+          }
+          SignalData portalSpawnData = new SignalData();
+          portalSpawnData.set("SpawnPosition", raycastHit.point);
+          portalSpawnData.set("SpawnDirection", raycastHit.normal);
+          portalSpawnData.set("ArenaId", ArenaId);
+          portalSpawnData.set("PortalColor", CurrentPortalColor);
+          PortalSpawnSignal.fire(portalSpawnData);
+          LastPortalLaunchTime = Time.time;
+          CurrentPortalColor = Color.clear;
+        }
+      }
+    }
   }
 
   // Update is called once per frame
   void Update() {
     Shoot();
+    ShootPortal();
   }
 
   void OnCollisionEnter(Collision collision) {
@@ -53,5 +88,4 @@ public class PlayerShoot : MonoBehaviour {
       // kill
     }
   }
-
 }
