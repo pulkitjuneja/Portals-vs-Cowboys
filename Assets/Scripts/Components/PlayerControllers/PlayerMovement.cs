@@ -31,12 +31,12 @@ public class PlayerMovement : MonoBehaviour {
   }
 
   void RotateJoystick() {
-    var verticalView = Input.GetAxis(PlayerInput.VerticalViewAxis);
-    var horizontalView = Input.GetAxis(PlayerInput.HorizontalViewAxis);
+    var verticalView = -Input.GetAxis(PlayerInput.VerticalViewAxis);
+    var horizontalView = -Input.GetAxis(PlayerInput.HorizontalViewAxis);
     if (verticalView != 0 || horizontalView != 0) {
       Debug.Log(verticalView);
       Debug.Log(horizontalView);
-      transform.eulerAngles = new Vector3(0, Mathf.Atan2(Input.GetAxis(PlayerInput.VerticalViewAxis), Input.GetAxis(PlayerInput.HorizontalViewAxis)) * 180 / Mathf.PI, 0);
+      transform.eulerAngles = new Vector3(0, Mathf.Atan2(horizontalView, horizontalView) * 180 / Mathf.PI, 0);
     }
   }
 

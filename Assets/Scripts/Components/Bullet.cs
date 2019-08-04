@@ -6,12 +6,15 @@ public class Bullet : MonoBehaviour {
   public float Velocity = 20;
   public int Lifetime = 8;
   public Rigidbody Rigidbody;
-  public int ParentPlayerHashCode { get; set; }
+  public int ArenaId { get; set; }
+  public int PlayerHashCode;
   public Signal BulletDestroySignal;
 
-  public void initialize(Vector3 position, Vector3 direction, int parentPlayerHashCode) {
+  public void initialize(Vector3 position, Vector3 direction,
+   int arenaId, int playerHashCode) {
     setRotationAndVelocity(position, direction);
-    this.ParentPlayerHashCode = parentPlayerHashCode;
+    ArenaId = arenaId;
+    PlayerHashCode = playerHashCode;
     StartCoroutine(KillSwitch());
   }
   public void setRotationAndVelocity(Vector3 position, Vector3 direction) {

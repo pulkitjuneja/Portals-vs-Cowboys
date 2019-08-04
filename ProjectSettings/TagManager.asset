@@ -4,11 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - PlayerOneSpawn
-  - PlayerTwoSpawn
   - Projectiles
   - Arena1PortalFluidSpawnPoint
   - Arena2PortalFluidSpawnPoint
+  - Arena1PlayerSpawnPoint
+  - Arena2PlayerSpawnPoint
   layers:
   - Default
   - TransparentFX

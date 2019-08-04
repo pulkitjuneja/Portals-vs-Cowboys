@@ -5,23 +5,51 @@ using UnityEngine;
 public class InitialSetup : MonoBehaviour {
   PortalManager PortalManager;
   BulletManager BulletManager;
-  public GameObject PlayerPrefab;
+  public GameObject[] PlayerPrefabs;
+  public GameObject PlayerUIPrefab;
+
+  public PlayerSelectionData[] PlayerSelectionData;
   void Start() {
     PortalManager = this.GetComponent<PortalManager>();
     BulletManager = this.GetComponent<BulletManager>();
+    SetPlayerData();
     SpawnPlayers();
     ActivateManagers();
   }
 
+  // Temporary this data will come from the player selection menu
+  void SetPlayerData() {
+    PlayerSelectionData = new PlayerSelectionData[2];
+    PlayerSelectionData[0] = new PlayerSelectionData(0, "Player1", 1, 0);
+    PlayerSelectionData[1] = new PlayerSelectionData(1, "Player2", 2, 1);
+  }
+
   void SpawnPlayers() {
-    Transform playerOneSpawnPoint = GameObject.FindWithTag(Tags.PlayerOneSpawn).transform;
-    Transform playerTwoSpawnPoint = GameObject.FindWithTag(Tags.PlayerTwoSpawn).transform;
-    GameObject playerOne = Instantiate(PlayerPrefab, playerOneSpawnPoint.position, playerOneSpawnPoint.rotation);
-    playerOne.GetComponent<PlayerInput>().AssignButtons(1);
-    playerOne.GetComponent<PlayerShoot>().ArenaId = 0;
-    GameObject playerTwo = Instantiate(PlayerPrefab, playerTwoSpawnPoint.position, playerTwoSpawnPoint.rotation);
-    playerTwo.GetComponent<PlayerInput>().AssignButtons(2);
-    playerTwo.GetComponent<PlayerShoot>().ArenaId = 1;
+    Dictionary<int, GameObject[]> spawnPoints = new Dictionary<int, GameObject[]>();
+    spawnPoints.Add(0, GameObject.FindGameObjectsWithTag(Constants.Arena1PlayerSpawnPoint));
+    spawnPoints.Add(1, GameObject.FindGameObjectsWithTag(Constants.Arena2PlayerSpawnPoint));
+    int team1Counter = 0, team2Counter = 0;
+    foreach (PlayerSelectionData data in PlayerSelectionData) {
+      int playerCounter = data.ArenId == 0 ? team1Counter : team2Counter;
+      Transform spawnPoint = spawnPoints[data.ArenId][0].transform;
+      GameObject player = Instantiate(PlayerPrefabs[data.CharacterId], spawnPoint.position, spawnPoint.rotation);
+      player.GetComponent<PlayerInput>().AssignButtons(data.ControllerId);
+      player.GetComponent<PlayerShoot>().ArenaId = data.ArenId;
+      BindPlayerUI(data, playerCounter, player);
+      if (data.ArenId == 0) {
+        team1Counter++;
+      } else {
+        team2Counter++;
+      }
+
+    }
+  }
+
+  void BindPlayerUI(PlayerSelectionData data, int playerCounter, GameObject player) {
+    string panelContainerString = data.ArenId == 0 ? "Arena1PlayerPanels" : "Arena2PlayerPanels";
+    GameObject Panel = GameObject.Find(panelContainerString).transform.GetChild(playerCounter).gameObject;
+    Panel.SetActive(true);
+    Panel.GetComponent<PlayerUIController>().Initialize(player, data.Name, "Frank");
   }
 
   void ActivateManagers() {

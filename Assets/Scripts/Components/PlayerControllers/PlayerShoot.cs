@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerShoot : MonoBehaviour {
   public LineRenderer AimLine;
@@ -9,10 +10,13 @@ public class PlayerShoot : MonoBehaviour {
   public Signal PortalSpawnSignal;
   public float ShootInterval = 0.5f;
   public float PortalShootInterval = 0.5f;
-  public int health;
+  public int health = 2;
   // TODO: come up with a better approach
   public int ArenaId;
   public Color CurrentPortalColor;
+
+  public Action<int> UpdateHealthUIAction;
+  public Action<Color> UpdatePortalUIAction;
 
   PlayerInput PlayerInput;
   float LastBulletLaunchTime;
@@ -21,7 +25,6 @@ public class PlayerShoot : MonoBehaviour {
   bool FrontPointHitResult;
 
   int shootLayerMask;
-
 
   void Start() {
     PlayerInput = GetComponent<PlayerInput>();
@@ -34,8 +37,9 @@ public class PlayerShoot : MonoBehaviour {
       float timeSinceLastLaunch = Time.time - LastBulletLaunchTime;
       if (timeSinceLastLaunch > ShootInterval) {
         SignalData spawnData = new SignalData();
-        spawnData.set("LaunchPoint", BulletLaunchPoint);
-        spawnData.set("PlayerHashCode", this.GetHashCode());
+        spawnData.set("launchPoint", BulletLaunchPoint);
+        spawnData.set("playerHashCode", this.GetHashCode());
+        spawnData.set("arenaId", ArenaId);
         BulletSpawnSignal.fire(spawnData);
         LastBulletLaunchTime = Time.time;
       }
@@ -45,6 +49,7 @@ public class PlayerShoot : MonoBehaviour {
   public void ChangeCurrentPortalColor(Color color) {
     CurrentPortalColor = color;
     AimLine.startColor = AimLine.endColor = color;
+    UpdatePortalUIAction(color);
   }
 
 
@@ -95,14 +100,15 @@ public class PlayerShoot : MonoBehaviour {
   }
 
   void TakeDamage(Bullet bullet) {
-    if (bullet.ParentPlayerHashCode == this.GetHashCode()) {
+    if (bullet.ArenaId == ArenaId) {
       if (health == 1)
         health = 0;
     } else {
       health--;
     }
+    UpdateHealthUIAction(health);
     if (health == 0) {
-      // kill
+      Destroy(this.gameObject);
     }
   }
 }
