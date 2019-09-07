@@ -1,0 +1,14 @@
+# Blender MTL File: 'Floor.blend'
+# Material Count: 1
+
+newmtl Floor
+Ns 0.000000
+Ka 0.418182 0.418182 0.418182
+Kd 0.000000 0.000000 0.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 1
+map_Bump -bm 3.200000 F:\\Projects\\Unity\\Portal-vs-Cowboys - Copy\\Assets\\Textures\\Floor\\NormalMap.png
+map_Kd F:\\Projects\\Unity\\Portal-vs-Cowboys - Copy\\Assets\\Textures\\Floor.png

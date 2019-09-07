@@ -13,7 +13,7 @@ public class PlayerShoot : MonoBehaviour {
   public int health = 2;
   // TODO: come up with a better approach
   public int ArenaId;
-  public Color CurrentPortalColor;
+  public PortalColorData CurrentPortalColors;
 
   public Action<int> UpdateHealthUIAction;
   public Action<Color> UpdatePortalUIAction;
@@ -28,7 +28,7 @@ public class PlayerShoot : MonoBehaviour {
 
   void Start() {
     PlayerInput = GetComponent<PlayerInput>();
-    ChangeCurrentPortalColor(Color.clear);
+    ChangeCurrentPortalColor(new PortalColorData(Color.clear, Color.clear));
     shootLayerMask = (1 << LayerMask.NameToLayer("Wall")) | (1 << LayerMask.NameToLayer("Portal"));
   }
 
@@ -46,17 +46,18 @@ public class PlayerShoot : MonoBehaviour {
     }
   }
 
-  public void ChangeCurrentPortalColor(Color color) {
-    CurrentPortalColor = color;
-    AimLine.startColor = AimLine.endColor = color;
-    UpdatePortalUIAction(color);
+  public void ChangeCurrentPortalColor(PortalColorData portalColors) {
+    CurrentPortalColors = portalColors;
+    AimLine.startColor = AimLine.endColor = portalColors.PrimaryColor;
+    //UpdatePortalUIAction(portalColors.PrimaryColor);
   }
 
 
   void ShootPortal() {
     if (Input.GetButtonDown(PlayerInput.FirePortal)) {
       float timeSinceLastLaunch = Time.time - LastPortalLaunchTime;
-      if (timeSinceLastLaunch > PortalShootInterval && !CurrentPortalColor.Equals(Color.clear)) {
+      if (timeSinceLastLaunch > PortalShootInterval &&
+        !CurrentPortalColors.PrimaryColor.Equals(Color.clear)) {
         if (FrontPointHitResult) {
           if (FrontPointHit.transform.gameObject.layer == LayerMask.NameToLayer("Portal")) {
             return;
@@ -65,10 +66,10 @@ public class PlayerShoot : MonoBehaviour {
           portalSpawnData.set("SpawnPosition", FrontPointHit.point);
           portalSpawnData.set("SpawnDirection", FrontPointHit.normal);
           portalSpawnData.set("ArenaId", ArenaId);
-          portalSpawnData.set("PortalColor", CurrentPortalColor);
+          portalSpawnData.set("PortalColors", CurrentPortalColors);
           PortalSpawnSignal.fire(portalSpawnData);
           LastPortalLaunchTime = Time.time;
-          ChangeCurrentPortalColor(Color.clear);
+          ChangeCurrentPortalColor(new PortalColorData(Color.clear, Color.clear));
         }
       }
     }
@@ -106,7 +107,7 @@ public class PlayerShoot : MonoBehaviour {
     } else {
       health--;
     }
-    UpdateHealthUIAction(health);
+    // UpdateHealthUIAction(health);
     if (health == 0) {
       Destroy(this.gameObject);
     }

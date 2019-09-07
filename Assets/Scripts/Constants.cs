@@ -4,11 +4,13 @@ using UnityEngine;
 
 
 public static class Constants {
-  public static List<Color> portalColors = new List<Color>
+  public static List<PortalColorData> portalColors = new List<PortalColorData>
   {
-     new Color(1.2f,0,0),
-     new Color(0,1.2f,0),
-     new Color(0,0,1.2f)
+     new PortalColorData(new Color(0,1,0.0705f), new Color(0,0.25f,0.0186f)),
+     new PortalColorData(new Color(1,1,0), new Color(0.5849f,0.18404f,0)),
+     new PortalColorData(new Color(0,0.9520f,1), new Color(0.03529f,0.32549f,1)),
+     new PortalColorData(new Color(1.333333f,0,2), new Color(0.25f,0,0.25f)),
+     new PortalColorData(new Color(2.670157f,2.670157f,2.670157f), new Color(0.5f,0.5f,0.5f)),
   };
 
   public static List<Vector2> PlayerPanelPositions = new List<Vector2>
@@ -22,7 +24,7 @@ public static class Constants {
   //Tags
   public const string Arena1PlayerSpawnPoint = "Arena1PlayerSpawnPoint";
   public const string Arena2PlayerSpawnPoint = "Arena2PlayerSpawnPoint";
-  public const string PortalOneSpawn = "PortalOneSpawn";
-  public const string PortalTwoSpawn = "PortalTwoSpawn";
+  public const string Arena1PortalFluidSpawnPoint = "Arena1PortalFluidSpawnPoint";
+  public const string Arena2PortalFluidSpawnPoint = "Arena2PortalFluidSpawnPoint";
   public const string Projectiles = "Projectiles";
 }

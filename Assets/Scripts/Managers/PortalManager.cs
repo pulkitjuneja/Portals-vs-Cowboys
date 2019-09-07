@@ -9,20 +9,20 @@ public class PortalManager : MonoBehaviour {
   public GameObject portalPrefab;
   // public int spawnInterval = 3;
 
-  public Dictionary<Color, Dictionary<int, GameObject>> PortalMap;
+  public Dictionary<PortalColorData, Dictionary<int, GameObject>> PortalMap;
 
   void Start() {
     // initializeSpawnPoints();
     // StartCoroutine(startSpawning());
     PortalTimeoutSignal.addListener(onPortalTimeOut);
-    PortalMap = new Dictionary<Color, Dictionary<int, GameObject>>();
+    PortalMap = new Dictionary<PortalColorData, Dictionary<int, GameObject>>();
     PortalSpawnSignal.addListener(SpawnPortal);
   }
 
   void SpawnPortal(SignalData portalSpawnData) {
     Vector3 position = portalSpawnData.get<Vector3>("SpawnPosition");
     Vector3 direction = portalSpawnData.get<Vector3>("SpawnDirection");
-    Color portalColor = portalSpawnData.get<Color>("PortalColor");
+    PortalColorData portalColor = portalSpawnData.get<PortalColorData>("PortalColors");
     int arenaId = portalSpawnData.get<int>("ArenaId");
     Debug.Log(arenaId);
     var spawnPosition = new Vector3(position.x, 1.4f, position.z) + direction * 0.01f;
@@ -46,8 +46,8 @@ public class PortalManager : MonoBehaviour {
   }
 
   void onPortalTimeOut(SignalData data) {
-    int arenaId = data.get<int>("arenaId");
-    Color portalColor = data.get<Color>("portalColor");
+    int arenaId = data.get<int>("ArenaId");
+    PortalColorData portalColor = data.get<PortalColorData>("PortalColors");
     GameObject otherPortal = getCorrespondingPortal(arenaId, portalColor);
     if (otherPortal != null) {
       otherPortal.GetComponent<Portal>().changeCorrespondingPortal(null);
@@ -56,7 +56,7 @@ public class PortalManager : MonoBehaviour {
     Debug.Log("Portal map");
   }
 
-  GameObject getCorrespondingPortal(int arenaId, Color portalColor) {
+  GameObject getCorrespondingPortal(int arenaId, PortalColorData portalColor) {
     int otherPortalId = 1 - arenaId;
     if (PortalMap.ContainsKey(portalColor) && PortalMap[portalColor].ContainsKey(otherPortalId)) {
       return PortalMap[portalColor][otherPortalId];

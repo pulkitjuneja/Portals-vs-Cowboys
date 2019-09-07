@@ -1,29 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.VFX;
 
 public class Portal : MonoBehaviour {
 
   public Signal PortalTimeoutSignal;
-  public MeshRenderer PortalMesh;
-  ParticleSystem Vortex;
+  public VisualEffect PortalVFX;
+  public VisualEffect IngestionVFX;
   public GameObject EmitterParent;
   [HideInInspector]
-  public GameObject CorrespondingPortal;
-  public Animator PortalAnimator;
+  GameObject CorrespondingPortal;
   int ArenaId;
-  Color PortalColor;
+  PortalColorData PortalColors;
   public int TimeoutInterval = 5;
 
   Light PortaLight;
 
-  public void initialize(Color color, GameObject correspondingPortal, int ArenaId) {
-    PortalMesh.material.SetColor("_portalColor", color);
-    ParticleSystem.MainModule main = Vortex.main;
-    main.startColor = color;
+  public void initialize(PortalColorData portalColors, GameObject correspondingPortal, int ArenaId) {
+    IngestionVFX.SetGradient("TrailColor", portalColors.TrailGradient);
+    PortalVFX.SetGradient("PortalColor", portalColors.PrimaryGradient);
     changeCorrespondingPortal(correspondingPortal);
-    PortaLight.color = color;
-    PortalColor = color;
+    PortaLight.color = portalColors.PrimaryColor;
+    PortalColors = portalColors;
     this.ArenaId = ArenaId;
   }
 
@@ -32,27 +31,22 @@ public class Portal : MonoBehaviour {
   }
 
   void Awake() {
-    Vortex = EmitterParent.GetComponentInChildren<ParticleSystem>();
     PortaLight = GetComponentInChildren<Light>();
-    PortalAnimator = GetComponent<Animator>();
   }
 
   IEnumerator killSwitch() {
     yield return new WaitForSeconds(TimeoutInterval);
     Destroy(this.gameObject);
     SignalData data = new SignalData();
-    data.set("arenaId", ArenaId);
-    data.set("portalColor", PortalColor);
+    data.set("ArenaId", ArenaId);
+    data.set("PortalColors", PortalColors);
     PortalTimeoutSignal.fire(data);
   }
 
   public void changeCorrespondingPortal(GameObject otherPortal) {
     CorrespondingPortal = otherPortal;
-    PortalAnimator.SetBool("isOpen", CorrespondingPortal ?? false);
-  }
-
-  void Update() {
-    EmitterParent.transform.Rotate(0, 0, 25);
+    float ingestionRadius = CorrespondingPortal == null ? 1.3f : 4.21f;
+    IngestionVFX.SetFloat("TrailRadius", ingestionRadius);
   }
 
   void OnTriggerEnter(Collider other) {

@@ -35,7 +35,7 @@ public class InitialSetup : MonoBehaviour {
       GameObject player = Instantiate(PlayerPrefabs[data.CharacterId], spawnPoint.position, spawnPoint.rotation);
       player.GetComponent<PlayerInput>().AssignButtons(data.ControllerId);
       player.GetComponent<PlayerShoot>().ArenaId = data.ArenId;
-      BindPlayerUI(data, playerCounter, player);
+      // BindPlayerUI(data, playerCounter, player);
       if (data.ArenId == 0) {
         team1Counter++;
       } else {

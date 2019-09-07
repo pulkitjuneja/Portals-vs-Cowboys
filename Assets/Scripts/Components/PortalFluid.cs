@@ -9,17 +9,17 @@ public class PortalFluid : MonoBehaviour {
   public Renderer SphereRenderer;
 
   Vector3 Location;
-  Color fluidColor;
+  PortalColorData PortalColors;
   int Arenaid;
   float fadeOutAnimationTime;
 
-  public void ResetProperties(Color color, Vector3 location, int Arenaid) {
+  public void ResetProperties(PortalColorData portalColors, Vector3 location, int Arenaid) {
     // set rendererr and particle colors
     SphereRenderer.material.EnableKeyword("_EMISSION");
-    SphereRenderer.material.SetColor("_EmissionColor", color);
-    SphereRenderer.material.SetColor("_BaseColor", color);
+    SphereRenderer.material.SetColor("_EmissionColor", portalColors.PrimaryColor);
+    SphereRenderer.material.SetColor("_BaseColor", portalColors.PrimaryColor);
     animator = GetComponent<Animator>();
-    fluidColor = color;
+    PortalColors = portalColors;
     fadeOutAnimationTime = 0.1f;
     this.Location = location;
     this.Arenaid = Arenaid;
@@ -29,7 +29,7 @@ public class PortalFluid : MonoBehaviour {
     if (other.tag == "Player") {
       PlayerShoot playerShoot = other.gameObject.GetComponent<PlayerShoot>();
       if (playerShoot != null) {
-        playerShoot.ChangeCurrentPortalColor(fluidColor);
+        playerShoot.ChangeCurrentPortalColor(PortalColors);
         SignalData fluidUsedData = new SignalData();
         fluidUsedData.set("location", Location);
         fluidUsedData.set("arenaId", Arenaid);
