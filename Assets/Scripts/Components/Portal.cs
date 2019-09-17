@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.VFX;
+using UnityEngine.UI;
 
 public class Portal : MonoBehaviour {
 
@@ -15,6 +16,8 @@ public class Portal : MonoBehaviour {
   PortalColorData PortalColors;
   public int TimeoutInterval = 5;
 
+  public Image TimeOutUI;
+
   Light PortaLight;
 
   public void initialize(PortalColorData portalColors, GameObject correspondingPortal, int ArenaId) {
@@ -24,6 +27,7 @@ public class Portal : MonoBehaviour {
     PortaLight.color = portalColors.PrimaryColor;
     PortalColors = portalColors;
     this.ArenaId = ArenaId;
+    InitialzeTimoutUI();
   }
 
   void Start() {
@@ -32,6 +36,10 @@ public class Portal : MonoBehaviour {
 
   void Awake() {
     PortaLight = GetComponentInChildren<Light>();
+  }
+
+  void Update() {
+    TimeOutUI.fillAmount -= (Time.fixedDeltaTime / TimeoutInterval);
   }
 
   IEnumerator killSwitch() {
@@ -76,5 +84,11 @@ public class Portal : MonoBehaviour {
     Vector3 rotatedVector = rotationAmount * reflection;
     rotatedVector.Normalize();
     return rotatedVector;
+  }
+
+  void InitialzeTimoutUI() {
+    TimeOutUI.color = new Color(PortalColors.PrimaryColor.r, PortalColors.PrimaryColor.g, PortalColors.PrimaryColor.b, 0.4f);
+    Transform uiTransform = TimeOutUI.canvas.transform;
+    uiTransform.LookAt(uiTransform.position + Camera.main.transform.rotation * Vector3.back, Camera.main.transform.rotation * Vector3.up);
   }
 }

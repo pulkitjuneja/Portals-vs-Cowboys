@@ -579,7 +579,6 @@ MonoBehaviour:
   PortalShootInterval: 0.5
   health: 2
   ArenaId: 0
-  CurrentPortalColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &6849296608006215347
 GameObject:
   m_ObjectHideFlags: 0
