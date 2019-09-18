@@ -18,9 +18,7 @@ public class Bullet : MonoBehaviour {
     StartCoroutine(KillSwitch());
   }
   public void setRotationAndVelocity(Vector3 position, Vector3 direction) {
-    Quaternion newRotation = Quaternion.FromToRotation(transform.up, direction);
     transform.position = position;
-    transform.rotation = newRotation;
     Rigidbody.velocity = direction * Velocity;
   }
 

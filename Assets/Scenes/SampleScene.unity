@@ -733,7 +733,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1072503254754400, guid: f090a6b49e0a273499900b9ba1ba7dd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4601014344161154, guid: f090a6b49e0a273499900b9ba1ba7dd8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6677,8 +6677,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2d25aab26997444d9ccaf65241d7fd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BulletPrefab: {fileID: 7054557915896810734, guid: ed5f3b8a3fdf8ea4faea0c2717eebf2e,
-    type: 3}
+  BulletPrefabs:
+  - {fileID: 7054557915896810734, guid: ed5f3b8a3fdf8ea4faea0c2717eebf2e, type: 3}
+  - {fileID: 2885016716278930225, guid: 08b27fe269af4584098ab462e9b4d53e, type: 3}
   BulletSpawnSignal: {fileID: 11400000, guid: 8a290dad6a1830e4d835291ebe1720e4, type: 2}
   BulletDestroySignal: {fileID: 11400000, guid: 39b4400f8c20ef64e89cf7f2105e6c28,
     type: 2}

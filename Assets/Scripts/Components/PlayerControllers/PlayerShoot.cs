@@ -17,6 +17,7 @@ public class PlayerShoot : MonoBehaviour {
 
   public Action<int> UpdateHealthUIAction;
   public Action<Color> UpdatePortalUIAction;
+  public BulletTypes BulletType;
 
   PlayerInput PlayerInput;
   float LastBulletLaunchTime;
@@ -40,6 +41,7 @@ public class PlayerShoot : MonoBehaviour {
         spawnData.set("launchPoint", BulletLaunchPoint);
         spawnData.set("playerHashCode", this.GetHashCode());
         spawnData.set("arenaId", ArenaId);
+        spawnData.set("bulletType", BulletType);
         BulletSpawnSignal.fire(spawnData);
         LastBulletLaunchTime = Time.time;
       }
