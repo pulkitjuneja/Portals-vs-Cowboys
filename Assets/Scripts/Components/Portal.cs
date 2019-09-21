@@ -87,7 +87,7 @@ public class Portal : MonoBehaviour {
   }
 
   void InitialzeTimoutUI() {
-    TimeOutUI.color = new Color(PortalColors.PrimaryColor.r, PortalColors.PrimaryColor.g, PortalColors.PrimaryColor.b, 0.4f);
+    TimeOutUI.color = new Color(PortalColors.PrimaryColor.r, PortalColors.PrimaryColor.g, PortalColors.PrimaryColor.b, 0.6f);
     Transform uiTransform = TimeOutUI.canvas.transform;
     uiTransform.LookAt(uiTransform.position + Camera.main.transform.rotation * Vector3.back, Camera.main.transform.rotation * Vector3.up);
   }

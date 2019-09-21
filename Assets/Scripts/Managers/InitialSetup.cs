@@ -33,8 +33,9 @@ public class InitialSetup : MonoBehaviour {
       int playerCounter = data.ArenId == 0 ? team1Counter : team2Counter;
       Transform spawnPoint = spawnPoints[data.ArenId][0].transform;
       GameObject player = Instantiate(PlayerPrefabs[data.CharacterId], spawnPoint.position, spawnPoint.rotation);
-      player.GetComponent<PlayerInput>().AssignButtons(data.ControllerId);
-      player.GetComponent<PlayerShoot>().ArenaId = data.ArenId;
+      player.GetComponentInChildren<PlayerInput>().AssignButtons(data.ControllerId);
+      player.GetComponentInChildren<PlayerShoot>().ArenaId = data.ArenId;
+      player.GetComponentInChildren<PlayerHealth>().ArenaId = data.ArenId;
       // BindPlayerUI(data, playerCounter, player);
       if (data.ArenId == 0) {
         team1Counter++;
@@ -49,7 +50,7 @@ public class InitialSetup : MonoBehaviour {
     string panelContainerString = data.ArenId == 0 ? "Arena1PlayerPanels" : "Arena2PlayerPanels";
     GameObject Panel = GameObject.Find(panelContainerString).transform.GetChild(playerCounter).gameObject;
     Panel.SetActive(true);
-    Panel.GetComponent<PlayerUIController>().Initialize(player, data.Name, "Frank");
+    Panel.GetComponentInChildren<PlayerUIController>().Initialize(player, data.Name, "Frank");
   }
 
   void ActivateManagers() {

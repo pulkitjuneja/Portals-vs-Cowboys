@@ -10,7 +10,6 @@ public class PlayerShoot : MonoBehaviour {
   public Signal PortalSpawnSignal;
   public float ShootInterval = 0.5f;
   public float PortalShootInterval = 0.5f;
-  public int health = 2;
   // TODO: come up with a better approach
   public int ArenaId;
   public PortalColorData CurrentPortalColors;
@@ -91,27 +90,5 @@ public class PlayerShoot : MonoBehaviour {
     CalculateFrontPointHit();
     Shoot();
     ShootPortal();
-  }
-
-  void OnCollisionEnter(Collision collision) {
-    Collider other = collision.collider;
-    if (other.tag == "Projectiles") {
-      var bullet = other.gameObject.GetComponent<Bullet>();
-      TakeDamage(bullet);
-      bullet.DestroyBullet();
-    }
-  }
-
-  void TakeDamage(Bullet bullet) {
-    if (bullet.ArenaId == ArenaId) {
-      if (health == 1)
-        health = 0;
-    } else {
-      health--;
-    }
-    // UpdateHealthUIAction(health);
-    if (health == 0) {
-      Destroy(this.gameObject);
-    }
   }
 }
