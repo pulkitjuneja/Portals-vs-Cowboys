@@ -8,10 +8,10 @@ public class PortalFluidSpawner : MonoBehaviour {
   public Signal PortalFluidUsedSignal;
   public int RespawnInterval;
 
-  Dictionary<int, Dictionary<Vector3, PortalColorData>> ArenaPointColorMap;
+  Dictionary<int, Dictionary<Vector3, TwoColorGradient>> ArenaPointColorMap;
   void Start() {
     PortalFluidUsedSignal.addListener(onPortalFluidUse);
-    ArenaPointColorMap = new Dictionary<int, Dictionary<Vector3, PortalColorData>>();
+    ArenaPointColorMap = new Dictionary<int, Dictionary<Vector3, TwoColorGradient>>();
     SpawnInitialPortalFluids();
   }
 
@@ -35,16 +35,16 @@ public class PortalFluidSpawner : MonoBehaviour {
     }
   }
 
-  void SpawnAtPosition(Vector3 position, PortalColorData portalColors, int arenaId) {
+  void SpawnAtPosition(Vector3 position, TwoColorGradient portalColors, int arenaId) {
     GameObject portalFluidObject = Instantiate(FluidPrefab, position, Quaternion.identity);
     portalFluidObject.GetComponent<PortalFluid>().ResetProperties(portalColors, position, arenaId);
     if (!ArenaPointColorMap.ContainsKey(arenaId)) {
-      ArenaPointColorMap.Add(arenaId, new Dictionary<Vector3, PortalColorData>());
+      ArenaPointColorMap.Add(arenaId, new Dictionary<Vector3, TwoColorGradient>());
     }
     ArenaPointColorMap[arenaId].Add(position, portalColors);
   }
 
-  List<PortalColorData> GetShuffledColorList() {
+  List<TwoColorGradient> GetShuffledColorList() {
     return Constants.portalColors.OrderBy(x => Random.value).ToList();
   }
 
@@ -57,7 +57,7 @@ public class PortalFluidSpawner : MonoBehaviour {
   }
 
   // Pick new color except the ones already present in the arena
-  PortalColorData GetCurrentSubtractedColors(List<PortalColorData> currentMapColors, PortalColorData currentFluidColors) {
+  TwoColorGradient GetCurrentSubtractedColors(List<TwoColorGradient> currentMapColors, TwoColorGradient currentFluidColors) {
     var subtractedColors = Constants.portalColors.Except(currentMapColors).ToList();
     subtractedColors.Remove(currentFluidColors);
     if (subtractedColors.Count > 0) {
@@ -67,14 +67,14 @@ public class PortalFluidSpawner : MonoBehaviour {
     }
   }
 
-  IEnumerator RespawnConsumedFluid(int arenaId, Vector3 location, PortalColorData currentFluidColors) {
+  IEnumerator RespawnConsumedFluid(int arenaId, Vector3 location, TwoColorGradient currentFluidColors) {
     yield return new WaitForSeconds(RespawnInterval);
     var currentMap = ArenaPointColorMap[arenaId];
     var otherMap = ArenaPointColorMap[1 - arenaId];
     var currentMapColors = currentMap.Values.ToList();
     var otherMapColors = otherMap.Values.ToList();
     float probability = Random.value;
-    PortalColorData newColor;
+    TwoColorGradient newColor;
     if (probability > 0.6) {
       newColor = GetCurrentSubtractedColors(currentMapColors, currentFluidColors);
     } else {

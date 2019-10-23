@@ -9,11 +9,11 @@ public class PortalFluid : MonoBehaviour {
   public Renderer SphereRenderer;
 
   Vector3 Location;
-  PortalColorData PortalColors;
+  TwoColorGradient PortalColors;
   int Arenaid;
   float fadeOutAnimationTime;
 
-  public void ResetProperties(PortalColorData portalColors, Vector3 location, int Arenaid) {
+  public void ResetProperties(TwoColorGradient portalColors, Vector3 location, int Arenaid) {
     // set rendererr and particle colors
     SphereRenderer.material.EnableKeyword("_EMISSION");
     SphereRenderer.material.SetColor("_EmissionColor", portalColors.PrimaryColor);

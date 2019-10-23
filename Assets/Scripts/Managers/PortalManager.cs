@@ -9,20 +9,18 @@ public class PortalManager : MonoBehaviour {
   public GameObject portalPrefab;
   // public int spawnInterval = 3;
 
-  public Dictionary<PortalColorData, Dictionary<int, GameObject>> PortalMap;
+  public Dictionary<TwoColorGradient, Dictionary<int, GameObject>> PortalMap;
 
   void Start() {
-    // initializeSpawnPoints();
-    // StartCoroutine(startSpawning());
-    PortalTimeoutSignal.addListener(onPortalTimeOut);
-    PortalMap = new Dictionary<PortalColorData, Dictionary<int, GameObject>>();
+    PortalTimeoutSignal.addListener(OnPortalTimeOut);
+    PortalMap = new Dictionary<TwoColorGradient, Dictionary<int, GameObject>>();
     PortalSpawnSignal.addListener(SpawnPortal);
   }
 
   void SpawnPortal(SignalData portalSpawnData) {
     Vector3 position = portalSpawnData.get<Vector3>("SpawnPosition");
     Vector3 direction = portalSpawnData.get<Vector3>("SpawnDirection");
-    PortalColorData portalColor = portalSpawnData.get<PortalColorData>("PortalColors");
+    TwoColorGradient portalColor = portalSpawnData.get<TwoColorGradient>("PortalColors");
     int arenaId = portalSpawnData.get<int>("ArenaId");
     Debug.Log(arenaId);
     var spawnPosition = new Vector3(position.x, 1.4f, position.z) + direction * 0.01f;
@@ -34,7 +32,7 @@ public class PortalManager : MonoBehaviour {
         Destroy(PortalMap[portalColor][arenaId]);
         PortalMap[portalColor].Remove(arenaId);
       }
-      correspondingPortal = getCorrespondingPortal(arenaId, portalColor);
+      correspondingPortal = GetCorrespondingPortal(arenaId, portalColor);
     } else {
       PortalMap.Add(portalColor, new Dictionary<int, GameObject>());
     }
@@ -45,10 +43,10 @@ public class PortalManager : MonoBehaviour {
     PortalMap[portalColor].Add(arenaId, portalObject);
   }
 
-  void onPortalTimeOut(SignalData data) {
+  void OnPortalTimeOut(SignalData data) {
     int arenaId = data.get<int>("ArenaId");
-    PortalColorData portalColor = data.get<PortalColorData>("PortalColors");
-    GameObject otherPortal = getCorrespondingPortal(arenaId, portalColor);
+    TwoColorGradient portalColor = data.get<TwoColorGradient>("PortalColors");
+    GameObject otherPortal = GetCorrespondingPortal(arenaId, portalColor);
     if (otherPortal != null) {
       otherPortal.GetComponent<Portal>().changeCorrespondingPortal(null);
     }
@@ -56,7 +54,7 @@ public class PortalManager : MonoBehaviour {
     Debug.Log("Portal map");
   }
 
-  GameObject getCorrespondingPortal(int arenaId, PortalColorData portalColor) {
+  GameObject GetCorrespondingPortal(int arenaId, TwoColorGradient portalColor) {
     int otherPortalId = 1 - arenaId;
     if (PortalMap.ContainsKey(portalColor) && PortalMap[portalColor].ContainsKey(otherPortalId)) {
       return PortalMap[portalColor][otherPortalId];

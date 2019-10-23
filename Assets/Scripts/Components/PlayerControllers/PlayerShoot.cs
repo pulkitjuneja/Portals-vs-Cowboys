@@ -12,7 +12,7 @@ public class PlayerShoot : MonoBehaviour {
   public float PortalShootInterval = 0.5f;
   // TODO: come up with a better approach
   public int ArenaId;
-  public PortalColorData CurrentPortalColors;
+  public TwoColorGradient CurrentPortalColors;
 
   public Action<int> UpdateHealthUIAction;
   public Action<Color> UpdatePortalUIAction;
@@ -28,7 +28,7 @@ public class PlayerShoot : MonoBehaviour {
 
   void Start() {
     PlayerInput = GetComponent<PlayerInput>();
-    ChangeCurrentPortalColor(new PortalColorData(Color.clear, Color.clear));
+    ChangeCurrentPortalColor(new TwoColorGradient(Color.clear, Color.clear));
     shootLayerMask = (1 << LayerMask.NameToLayer("Wall")) | (1 << LayerMask.NameToLayer("Portal"));
   }
 
@@ -47,7 +47,7 @@ public class PlayerShoot : MonoBehaviour {
     }
   }
 
-  public void ChangeCurrentPortalColor(PortalColorData portalColors) {
+  public void ChangeCurrentPortalColor(TwoColorGradient portalColors) {
     CurrentPortalColors = portalColors;
     AimLine.startColor = AimLine.endColor = portalColors.PrimaryColor;
     //UpdatePortalUIAction(portalColors.PrimaryColor);
@@ -70,7 +70,7 @@ public class PlayerShoot : MonoBehaviour {
           portalSpawnData.set("PortalColors", CurrentPortalColors);
           PortalSpawnSignal.fire(portalSpawnData);
           LastPortalLaunchTime = Time.time;
-          ChangeCurrentPortalColor(new PortalColorData(Color.clear, Color.clear));
+          ChangeCurrentPortalColor(new TwoColorGradient(Color.clear, Color.clear));
         }
       }
     }

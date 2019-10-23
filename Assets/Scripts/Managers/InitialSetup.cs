@@ -36,7 +36,6 @@ public class InitialSetup : MonoBehaviour {
       player.GetComponentInChildren<PlayerInput>().AssignButtons(data.ControllerId);
       player.GetComponentInChildren<PlayerShoot>().ArenaId = data.ArenId;
       player.GetComponentInChildren<PlayerHealth>().ArenaId = data.ArenId;
-      // BindPlayerUI(data, playerCounter, player);
       if (data.ArenId == 0) {
         team1Counter++;
       } else {
@@ -44,13 +43,6 @@ public class InitialSetup : MonoBehaviour {
       }
 
     }
-  }
-
-  void BindPlayerUI(PlayerSelectionData data, int playerCounter, GameObject player) {
-    string panelContainerString = data.ArenId == 0 ? "Arena1PlayerPanels" : "Arena2PlayerPanels";
-    GameObject Panel = GameObject.Find(panelContainerString).transform.GetChild(playerCounter).gameObject;
-    Panel.SetActive(true);
-    Panel.GetComponentInChildren<PlayerUIController>().Initialize(player, data.Name, "Frank");
   }
 
   void ActivateManagers() {

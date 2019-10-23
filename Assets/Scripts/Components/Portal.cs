@@ -13,14 +13,14 @@ public class Portal : MonoBehaviour {
   [HideInInspector]
   GameObject CorrespondingPortal;
   int ArenaId;
-  PortalColorData PortalColors;
+  TwoColorGradient PortalColors;
   public int TimeoutInterval = 5;
 
   public Image TimeOutUI;
 
   Light PortaLight;
 
-  public void initialize(PortalColorData portalColors, GameObject correspondingPortal, int ArenaId) {
+  public void initialize(TwoColorGradient portalColors, GameObject correspondingPortal, int ArenaId) {
     IngestionVFX.SetGradient("TrailColor", portalColors.TrailGradient);
     PortalVFX.SetGradient("PortalColor", portalColors.PrimaryGradient);
     changeCorrespondingPortal(correspondingPortal);

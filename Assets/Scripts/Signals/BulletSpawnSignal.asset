@@ -9,6 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa1faae452694e54b9771bf18d81f698, type: 3}
+  m_Script: {fileID: 11500000, guid: 622720f3c2f24404995f702958251c11, type: 3}
   m_Name: BulletSpawnSignal
   m_EditorClassIdentifier: 

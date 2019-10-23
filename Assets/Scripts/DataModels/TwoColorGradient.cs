@@ -2,12 +2,12 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class PortalColorData : IEquatable<PortalColorData> {
+public class TwoColorGradient : IEquatable<TwoColorGradient> {
   public Gradient PrimaryGradient;
   public Gradient TrailGradient;
   public Color PrimaryColor;
 
-  public PortalColorData(Color primaryColor, Color accentColor) {
+  public TwoColorGradient(Color primaryColor, Color accentColor) {
     PrimaryColor = primaryColor;
     CreatePrimaryGradient(primaryColor, accentColor);
     CreateTrailGradient(primaryColor, accentColor);
@@ -51,12 +51,12 @@ public class PortalColorData : IEquatable<PortalColorData> {
     TrailGradient.SetKeys(colorKey, alphaKey);
   }
 
-  public bool Equals(PortalColorData other) {
+  public bool Equals(TwoColorGradient other) {
     if (other is null)
       return false;
 
     return this.PrimaryColor == other.PrimaryColor;
   }
-  public override bool Equals(object obj) => Equals(obj as PortalColorData);
+  public override bool Equals(object obj) => Equals(obj as TwoColorGradient);
   public override int GetHashCode() => (PrimaryColor).GetHashCode();
 }

@@ -11,6 +11,7 @@ public class PlayerHealth : MonoBehaviour {
 
   public Image HealthIndicator;
   public Animator HealthIndicatorAnimator;
+  public Signal PlayerKilledSignal;
 
   void ToggleHealthIndicatorUI(int health) {
     if (health == 1) {
@@ -34,6 +35,9 @@ public class PlayerHealth : MonoBehaviour {
     health--;
     ToggleHealthIndicatorUI(health);
     if (health == 0) {
+      SignalData data = new SignalData();
+      data.set("ArenaID", ArenaId);
+      PlayerKilledSignal.fire(data);
       Destroy(this.gameObject);
     }
   }
